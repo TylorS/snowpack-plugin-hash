@@ -53,17 +53,7 @@ jobs:
           at: /home/circleci
       - run:
           name: Test
-          command: npm run unit-test
-
-  lint:
-    executor: custom-executor
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /home/circleci
-      - run:
-          name: Lint
-          command: npm run lint
+          command: npm test
 
   audit:
     executor: custom-executor
