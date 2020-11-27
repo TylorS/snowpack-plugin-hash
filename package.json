@@ -40,7 +40,7 @@
     "build": "rimraf lib && tsc --outDir lib",
     "test": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
     "precommit": "lint-staged",
-    "preversion": "npm test && npm run update && npm run build",
+    "preversion": "npm test && npm run build",
     "postversion": "npm publish --access=public",
     "watch": "npm run build -- --watch"
   },
