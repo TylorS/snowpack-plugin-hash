@@ -26,7 +26,6 @@ jobs:
           root: /home/circleci
           paths:
             - project/src
-            - project/tools
             - project/node_modules
 
   build:
@@ -40,10 +39,6 @@ jobs:
           command: |
             pwd
             npm run build
-      - persist_to_workspace:
-          root: /home/circleci
-          paths:
-            - project/build
 
   test:
     executor: custom-executor
