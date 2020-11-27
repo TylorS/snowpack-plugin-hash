@@ -88,9 +88,6 @@ workflows:
       - test:
           requires:
             - install
-      - lint:
-          requires:
-            - install
       - audit:
           requires:
             - install
