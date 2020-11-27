@@ -1,0 +1,63 @@
+{
+  "name": "snowpack-plugin-hash",
+  "version": "0.0.0",
+  "description": "Content-hash for Snowpack",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "typings": "./lib/index.d.ts",
+  "sideEffects": false,
+  "dependencies": {
+    "posthtml": "^0.15.1",
+    "posthtml-rewrite-paths": "^1.0.1",
+    "ts-morph": "^8.2.0",
+    "tslib": "^2.0.3"
+  },
+  "peerDependencies": {
+    "snowpack": "^2.17.1"
+  },
+  "devDependencies": {
+    "@typed/test": "^9.5.0",
+    "@types/http-proxy": "^1.17.4",
+    "@types/node": "^14.14.6",
+    "@typescript-eslint/eslint-plugin": "^4.6.1",
+    "@typescript-eslint/parser": "^4.6.1",
+    "concurrently": "^5.3.0",
+    "eslint": "^7.13.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-import-resolver-custom-alias": "^1.2.0",
+    "eslint-import-resolver-typescript": "^2.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-simple-import-sort": "^5.0.3",
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.1",
+    "prettier": "^2.1.2",
+    "rimraf": "^3.0.2",
+    "snowpack": "^2.17.1",
+    "typescript": "^4.1.2"
+  },
+  "scripts": {
+    "build": "rimraf lib && tsc --outDir lib",
+    "test": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
+    "precommit": "lint-staged",
+    "preversion": "npm test && npm run update && npm run build",
+    "postversion": "npm publish --access=public",
+    "watch": "npm run build -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TylorS/typed-fp.git"
+  },
+  "keywords": [
+    "Snowpack",
+    "Plugin",
+    "Content Hash",
+    "Hash"
+  ],
+  "author": "Tylor Steinberger <tlsteinberger167@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TylorS/typed-fp/issues"
+  },
+  "homepage": "https://github.com/TylorS/typed-fp#readme"
+}
