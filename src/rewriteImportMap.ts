@@ -25,7 +25,5 @@ function rewritePath(directory: string, outputPath: string, hashes: Map<string, 
   const hash = hashes.get(fullPath)
   const ext = extname(fullPath)
 
-  console.log(fullPath, ':', hash)
-
   return hash ? outputPath.replace(ext, `.${hash}${ext}`) : outputPath
 }
