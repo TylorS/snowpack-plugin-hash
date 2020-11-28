@@ -1,12 +1,12 @@
 # snowpack-plugin-hash
 
 Makes use of [ts-morph](https://ts-morph.com/) and [posthtml](https://github.com/posthtml/posthtml) to apply
-content hashes to all of your build assets. This can be helpful in production to allow caching files permanently since the hases are determinstic based on the contents of the file. 
+content hashes to all of your build assets. This can be helpful in production to allow caching files permanently since the hashes are determinstic based on the contents of the file. 
 
 ## Features
 
 - SHA-256 Content Hashes
-- SourceMap generation and remapping
+- SourceMap generation w/ remapping support
 - Remaps `import-map.json` to reference hashes
 - Generates an asset manifest for all files
 
