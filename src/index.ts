@@ -20,6 +20,7 @@ const DEFAULT_HASH_LENGTH = 12
 const DEFAULT_ASSET_MANIFEST = 'asset-manifest.json'
 
 const supportedSourceFileExtensions = ['.js', '.jsx']
+const prefix = '[snowpack-plugin-hash]'
 
 const plugin = (
   config: SnowpackConfig,
@@ -50,6 +51,7 @@ const plugin = (
       const htmlFiles = allFiles.filter((f) => extname(f) === '.html')
 
       // Generate a map of all the hashes
+      console.info(prefix, 'Generating Hashes...')
       const hashes = new Map(
         await Promise.all(
           sourceFiles.map((sourceFile) =>
@@ -90,9 +92,15 @@ const plugin = (
       await renameFiles(sourceFiles, hashes)
 
       // Update HTML file references
-      await updateHtmlFiles(htmlFiles, hashes, options.buildDirectory)
+      if (htmlFiles.length > 0) {
+        console.info(prefix, 'Rewriting HTML imports...')
+
+        await updateHtmlFiles(htmlFiles, hashes, options.buildDirectory)
+      }
 
       // Generate SourceMaps for hash additions
+      console.info(prefix, 'Generating SourceMaps...')
+
       const sourceMaps = await generateSourceMaps(initialCopies, updatedFiles, hashes)
       await Promise.all(sourceMaps.map(([filePath, map]) => writeFile(filePath, map)))
 
@@ -104,14 +112,18 @@ const plugin = (
       )
 
       // Try to rewrite the import map with hashes
+      console.info(prefix, 'Rewriting Import Map...')
+
       const importMap = await rewriteImportMap(webModulesDir, hashes)
+
+      console.info(prefix, `Generating Asset Manifest [${assetManifest}]...`)
 
       // Generate an asset manifest for all files at configured path
       await generateAssetManifest(
         options.buildDirectory,
         webModulesDir,
         join(options.buildDirectory, assetManifest),
-        importMap,
+        importMap || {},
         hashes,
       )
     },

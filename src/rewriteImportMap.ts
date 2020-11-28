@@ -6,7 +6,7 @@ export async function rewriteImportMap(directory: string, hashes: Map<string, st
   const importMapPath = join(directory, 'import-map.json')
 
   if (!existsSync(importMapPath)) {
-    return
+    return null
   }
 
   const importMap = await readFile(importMapPath).then((b) => JSON.parse(b.toString()))
@@ -17,7 +17,7 @@ export async function rewriteImportMap(directory: string, hashes: Map<string, st
 
   await writeFile(importMapPath, JSON.stringify(importMap, null, 2))
 
-  return importMap.imports
+  return importMap.imports as Record<string, string>
 }
 
 function rewritePath(directory: string, outputPath: string, hashes: Map<string, string>): string {
