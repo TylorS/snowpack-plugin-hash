@@ -7,8 +7,11 @@
   "typings": "./lib/index.d.ts",
   "sideEffects": false,
   "dependencies": {
+    "@ampproject/remapping": "^0.3.0",
+    "magic-string": "^0.25.7",
     "posthtml": "^0.15.1",
     "posthtml-rewrite-paths": "^1.0.1",
+    "source-map": "^0.7.3",
     "ts-morph": "^8.2.0",
     "tslib": "^2.0.3"
   },
