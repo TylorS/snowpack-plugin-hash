@@ -26,7 +26,7 @@ const plugin = (
   pluginOptions: plugin.PluginOptions = {},
 ): SnowpackPlugin => {
   const {
-    tsConfig = 'tsconfig.json',
+    tsConfig,
     hashLength = DEFAULT_HASH_LENGTH,
     assetManifest = DEFAULT_ASSET_MANIFEST,
   } = pluginOptions
