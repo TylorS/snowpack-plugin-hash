@@ -41,7 +41,7 @@ function getSourceMapTextRange(code: string) {
 
 export function rewriteSourceMapUrls(
   sourceFiles: readonly SourceFile[],
-  hashes: Map<string, string>,
+  hashes: ReadonlyMap<string, string>,
 ) {
   for (const sourceFile of sourceFiles) {
     const contents = sourceFile.getFullText()

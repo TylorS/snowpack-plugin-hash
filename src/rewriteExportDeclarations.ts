@@ -6,7 +6,7 @@ import { replaceHash } from './replaceHash'
 
 export function rewriteExportDeclarations(
   sourceFiles: readonly SourceFile[],
-  hashes: Map<string, string>,
+  hashes: ReadonlyMap<string, string>,
 ) {
   for (const sourceFile of sourceFiles) {
     const directory = dirname(sourceFile.getFilePath())

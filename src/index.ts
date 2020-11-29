@@ -10,12 +10,9 @@ import { generateSourceMaps } from './generateSourceMaps'
 import { getFileSnapshot } from './getFileSnapshot'
 import { readAllFiles } from './readAllFiles'
 import { renameFiles } from './renameFiles'
-import { rewriteCssHashes } from './rewriteCssHashes'
-import { rewriteExportDeclarations } from './rewriteExportDeclarations'
+import { rewriteHashesInSourceFiles } from './rewriteHashes'
 import { rewriteHtmlFiles } from './rewriteHtmlFiles'
-import { rewriteImportDeclarations } from './rewriteImportDeclarations'
 import { rewriteImportMap } from './rewriteImportMap'
-import { rewriteSourceMapUrls } from './rewriteSourceMapUrls'
 import { writeAllFiles } from './writeAllFiles'
 
 const DEFAULT_HASH_LENGTH = 12
@@ -72,23 +69,14 @@ const plugin = (
         ),
       )
 
-      // Update JavaScript Files with hashes
-      if (jsFiles.length > 0) {
-        console.info(prefix, 'Rewriting JavaScript files...')
-
-        rewriteImportDeclarations(jsFiles, hashes)
-        rewriteExportDeclarations(jsFiles, hashes)
-        rewriteSourceMapUrls(jsFiles, hashes)
-
-        await Promise.all(jsFiles.map((s) => s.save()))
-      }
-
-      // Update CSS Files with hashes
-      if (cssFiles.length > 0) {
-        console.info(prefix, 'Rewriting CSS files...')
-
-        await rewriteCssHashes(options.buildDirectory, cssFiles, initialSnapshot, hashes)
-      }
+      await rewriteHashesInSourceFiles({
+        prefix,
+        buildDirectory: options.buildDirectory,
+        jsFiles,
+        cssFiles,
+        hashes,
+        initialSnapshot,
+      })
 
       // Get a snapshot of all of the updated source files
       const updatedSnapshot = await getFileSnapshot(allFilePaths)
