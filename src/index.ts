@@ -2,6 +2,8 @@ import { existsSync } from 'fs'
 import { extname, join } from 'path'
 import { SnowpackConfig, SnowpackPlugin } from 'snowpack'
 import { Project } from 'ts-morph'
+import { gray, green, red, yellow } from 'typed-colors'
+import { cross, tick } from 'typed-figures'
 
 import { createFileReference } from './createFileReference'
 import { deleteSourceMaps } from './deleteSourceMaps'
@@ -19,7 +21,9 @@ const DEFAULT_HASH_LENGTH = 12
 const DEFAULT_ASSET_MANIFEST = 'asset-manifest.json'
 
 const jsFileExtensions = ['.js', '.jsx']
-const prefix = '[snowpack-plugin-hash]'
+const prefix = gray('[snowpack-plugin-hash]')
+
+const log = (msg: string) => console.info(prefix, msg)
 
 const plugin = (
   config: SnowpackConfig,
@@ -51,7 +55,7 @@ const plugin = (
       const allFilePaths = [...jsFiles.map((s) => s.getFilePath()), ...cssFiles]
 
       if (allFilePaths.length === 0) {
-        console.info(prefix, 'No supported files found to apply content hashes.')
+        log(`${red(cross)} No supported files found to apply content hashes.`)
 
         return
       }
@@ -60,7 +64,7 @@ const plugin = (
       const initialSnapshot = await getFileSnapshot(allFilePaths)
 
       // Generate a map of all the hashes
-      console.info(prefix, 'Generating Hashes...')
+      log(`${yellow('!')} Generating Hashes...`)
       const hashes = new Map(
         await Promise.all(
           allFilePaths.map((filePath) =>
@@ -70,7 +74,7 @@ const plugin = (
       )
 
       await rewriteHashesInSourceFiles({
-        prefix,
+        log,
         buildDirectory: options.buildDirectory,
         jsFiles,
         cssFiles,
@@ -88,13 +92,13 @@ const plugin = (
       const htmlFiles = allFiles.filter((f) => extname(f) === '.html')
 
       if (htmlFiles.length > 0) {
-        console.info(prefix, 'Rewriting HTML imports...')
+        log(`${yellow('!')} Rewriting HTML imports...`)
 
         await rewriteHtmlFiles(htmlFiles, hashes, options.buildDirectory)
       }
 
       // Generate SourceMaps for hash additions
-      console.info(prefix, 'Generating SourceMaps...')
+      log(`${yellow('!')} Generating SourceMaps...`)
       await writeAllFiles(await generateSourceMaps(initialSnapshot, updatedSnapshot, hashes))
 
       // Delete previously-created sourceMaps
@@ -105,11 +109,11 @@ const plugin = (
 
       let importMap: Record<string, string> | null = null
       if (existsSync(importMapPath)) {
-        console.info(prefix, 'Rewriting Import Map...')
+        log(`${yellow('!')} Rewriting Import Map...`)
         importMap = await rewriteImportMap(importMapPath, webModulesDir, hashes)
       }
 
-      console.info(prefix, `Generating Asset Manifest [${assetManifest}]...`)
+      log(`Generating Asset Manifest [${assetManifest}]...`)
 
       // Generate an asset manifest for all files at configured path
       await generateAssetManifest(
@@ -119,6 +123,8 @@ const plugin = (
         importMap || {},
         hashes,
       )
+
+      log(`${green(tick)} Complete`)
     },
   }
 }

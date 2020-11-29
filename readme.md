@@ -21,6 +21,8 @@ yarn add -d snowpack-plugin-hash
 
 ## Usage
 
+So far in my experience it has been best to keep this plugin last to ensure the asset manifest is correct.
+
 ```js
 // snowpack.config.js
 

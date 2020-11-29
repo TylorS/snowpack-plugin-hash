@@ -1,4 +1,5 @@
 import { SourceFile } from 'ts-morph'
+import { yellow } from 'typed-colors'
 
 import { rewriteCssHashes } from './rewriteCssHashes'
 import { rewriteExportDeclarations } from './rewriteExportDeclarations'
@@ -6,7 +7,7 @@ import { rewriteImportDeclarations } from './rewriteImportDeclarations'
 import { rewriteSourceMapUrls } from './rewriteSourceMapUrls'
 
 export type RewriteHashesOptions = {
-  readonly prefix: string
+  readonly log: (msg: string) => void
   readonly buildDirectory: string
   readonly jsFiles: readonly SourceFile[]
   readonly cssFiles: readonly string[]
@@ -15,11 +16,11 @@ export type RewriteHashesOptions = {
 }
 
 export async function rewriteHashesInSourceFiles(options: RewriteHashesOptions) {
-  const { prefix, buildDirectory, jsFiles, cssFiles, hashes, initialSnapshot } = options
+  const { log, buildDirectory, jsFiles, cssFiles, hashes, initialSnapshot } = options
 
   // Update JavaScript Files with hashes
   if (jsFiles.length > 0) {
-    console.info(prefix, 'Rewriting JavaScript files...')
+    log(`${yellow('!')} Rewriting JavaScript files...`)
 
     rewriteImportDeclarations(jsFiles, hashes)
     rewriteExportDeclarations(jsFiles, hashes)
@@ -30,7 +31,7 @@ export async function rewriteHashesInSourceFiles(options: RewriteHashesOptions) 
 
   // Update CSS Files with hashes
   if (cssFiles.length > 0) {
-    console.info(prefix, 'Rewriting CSS files...')
+    log(`${yellow('!')} Rewriting CSS files...`)
 
     await rewriteCssHashes(buildDirectory, cssFiles, initialSnapshot, hashes)
   }

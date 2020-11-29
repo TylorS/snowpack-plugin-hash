@@ -14,7 +14,9 @@
     "posthtml-rewrite-paths": "^1.0.1",
     "source-map": "^0.7.3",
     "ts-morph": "^8.2.0",
-    "tslib": "^2.0.3"
+    "tslib": "^2.0.3",
+    "typed-colors": "^1.0.0",
+    "typed-figures": "^1.0.0"
   },
   "peerDependencies": {
     "snowpack": "^2.17.1"
