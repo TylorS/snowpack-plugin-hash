@@ -41,7 +41,9 @@
   },
   "scripts": {
     "build": "rimraf lib && tsc --outDir lib",
-    "test": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
+    "test": "concurrently 'npm:lint' 'npm:unit-test'",
+    "unit-test": "typed-test",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
     "precommit": "lint-staged",
     "preversion": "npm test && npm run build",
     "postversion": "npm publish --access=public",
