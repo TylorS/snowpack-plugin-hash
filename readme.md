@@ -5,7 +5,7 @@ content hashes to all of your build assets. This can be helpful in production to
 
 ## Features
 
-- SHA-256 Content Hashes
+- SHA-256 Content Hashes for JS, JSX, and CSS files.
 - SourceMap generation w/ remapping support
 - Remaps `import-map.json` to reference hashes
 - Generates an asset manifest for all files
