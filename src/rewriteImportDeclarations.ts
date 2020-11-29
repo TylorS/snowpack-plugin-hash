@@ -1,7 +1,8 @@
-import { dirname, extname } from 'path'
+import { dirname } from 'path'
 import { SourceFile } from 'ts-morph'
 
 import { makeAbsolute } from './makeAbsolute'
+import { replaceHash } from './replaceHash'
 
 export function rewriteImportDeclarations(
   sourceFiles: readonly SourceFile[],
@@ -14,10 +15,9 @@ export function rewriteImportDeclarations(
       const specifier = importDeclaration.getModuleSpecifierValue()
       const importFilePath = makeAbsolute(directory, specifier)
       const hash = hashes.get(importFilePath)
-      const ext = extname(specifier)
 
       if (hash) {
-        importDeclaration.setModuleSpecifier(specifier.replace(ext, `.${hash}${ext}`))
+        importDeclaration.setModuleSpecifier(replaceHash(specifier, hash))
       }
     }
   }

@@ -1,6 +1,7 @@
 import { EOL } from 'os'
-import { extname } from 'path'
 import { SourceFile } from 'ts-morph'
+
+import { replaceHash } from './replaceHash'
 
 const innerRegex = /[#@] sourceMappingURL=([^\s'"]*)/
 const regex = RegExp(
@@ -53,8 +54,7 @@ export function rewriteSourceMapUrls(
 
     const filePath = sourceFile.getFilePath()
     const hash = hashes.get(filePath)!
-    const ext = extname(filePath)
-    const hashedUrl = sourceMapUrl.replace(ext, `.${hash}${ext}`)
+    const hashedUrl = replaceHash(filePath, hash)
 
     sourceFile.replaceText([...textRange], `//# sourceMappingURL=${hashedUrl}` + EOL)
   }

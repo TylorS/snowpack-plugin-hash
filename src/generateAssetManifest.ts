@@ -1,5 +1,7 @@
 import { writeFile } from 'fs/promises'
-import { extname, join, relative } from 'path'
+import { join, relative } from 'path'
+
+import { replaceHash } from './replaceHash'
 
 export async function generateAssetManifest(
   outputDir: string,
@@ -13,9 +15,8 @@ export async function generateAssetManifest(
 
   for (const [path, hash] of hashes) {
     const relativePath = relative(outputDir, path)
-    const ext = extname(relativePath)
 
-    assets[relativePath] = relativePath.replace(ext, `.${hash}${ext}`)
+    assets[relativePath] = replaceHash(relativePath, hash)
   }
 
   for (const [from, to] of Object.entries(importMap)) {
