@@ -9,6 +9,7 @@ content hashes to all of your build assets. This can be helpful in production to
 - SourceMap generation w/ remapping support
 - Remaps `import-map.json` to reference hashes
 - Generates an asset manifest for all files
+- Rewrites all the `script.src` and `link.href` in your HTML files.
 
 ## Install
 
