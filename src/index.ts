@@ -113,7 +113,7 @@ const plugin = (
         importMap = await rewriteImportMap(importMapPath, webModulesDir, hashes)
       }
 
-      log(`Generating Asset Manifest [${assetManifest}]...`)
+      log(`${yellow('!')} Generating Asset Manifest [${assetManifest}]...`)
 
       // Generate an asset manifest for all files at configured path
       await generateAssetManifest(
