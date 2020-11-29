@@ -6,7 +6,9 @@ import { generatePathMap } from './generatePathMap'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const rewritePaths = require('posthtml-rewrite-paths').default
 
-export async function updateHtmlFiles(
+const search = { script: ['src'], link: ['href'] }
+
+export async function rewriteHtmlFiles(
   htmlFiles: readonly string[],
   hashes: Map<string, string>,
   buildDirectory: string,
@@ -14,7 +16,7 @@ export async function updateHtmlFiles(
   await Promise.all(
     htmlFiles.map(async (htmlFile) => {
       const pathMap = generatePathMap(buildDirectory, hashes, htmlFile)
-      const rewrite = postHtml([rewritePaths({ pathMap })])
+      const rewrite = postHtml([rewritePaths({ search, pathMap })])
 
       const buffer = await readFile(htmlFile)
       const { html } = await rewrite.process(buffer.toString())

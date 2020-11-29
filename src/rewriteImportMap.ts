@@ -1,14 +1,11 @@
-import { existsSync } from 'fs'
 import { readFile, writeFile } from 'fs/promises'
 import { extname, join } from 'path'
 
-export async function rewriteImportMap(directory: string, hashes: Map<string, string>) {
-  const importMapPath = join(directory, 'import-map.json')
-
-  if (!existsSync(importMapPath)) {
-    return null
-  }
-
+export async function rewriteImportMap(
+  importMapPath: string,
+  directory: string,
+  hashes: Map<string, string>,
+) {
   const importMap = await readFile(importMapPath).then((b) => JSON.parse(b.toString()))
 
   for (const [inputPath, outputPath] of Object.entries<string>(importMap.imports)) {

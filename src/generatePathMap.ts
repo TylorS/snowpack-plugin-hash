@@ -4,10 +4,10 @@ import { makeAbsolute } from './makeAbsolute'
 
 export function generatePathMap(
   buildDirectory: string,
-  hashes: Map<string, string>,
-  htmlFile: string,
+  hashes: ReadonlyMap<string, string>,
+  filePath: string,
 ): Record<string, string> {
-  return Object.fromEntries(Array.from(hashes).flatMap(applyRemounts(buildDirectory, htmlFile)))
+  return Object.fromEntries(Array.from(hashes).flatMap(applyRemounts(buildDirectory, filePath)))
 }
 
 function applyRemounts(buildDirectory: string, path: string) {
