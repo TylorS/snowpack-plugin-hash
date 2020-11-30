@@ -1,4 +1,5 @@
 import { EOL } from 'os'
+import { basename } from 'path'
 import { SourceFile } from 'ts-morph'
 
 import { replaceHash } from './replaceHash'
@@ -54,7 +55,7 @@ export function rewriteSourceMapUrls(
 
     const filePath = sourceFile.getFilePath()
     const hash = hashes.get(filePath)!
-    const hashedUrl = replaceHash(filePath, hash)
+    const hashedUrl = basename(replaceHash(filePath, hash))
 
     sourceFile.replaceText([...textRange], `//# sourceMappingURL=${hashedUrl}` + EOL)
   }
