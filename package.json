@@ -8,11 +8,9 @@
   "sideEffects": false,
   "dependencies": {
     "@ampproject/remapping": "^0.3.0",
-    "css-tree": "^1.1.2",
     "magic-string": "^0.25.7",
     "posthtml": "^0.15.1",
     "posthtml-rewrite-paths": "^1.0.1",
-    "source-map": "^0.7.3",
     "ts-morph": "^8.2.0",
     "tslib": "^2.0.3",
     "typed-colors": "^1.0.0",
@@ -55,7 +53,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TylorS/typed-fp.git"
+    "url": "git+https://github.com/TylorS/snowpack-plugin-hash.git"
   },
   "keywords": [
     "Snowpack",
@@ -66,7 +64,7 @@
   "author": "Tylor Steinberger <tlsteinberger167@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/TylorS/typed-fp/issues"
+    "url": "https://github.com/TylorS/snowpack-plugin-hash/issues"
   },
-  "homepage": "https://github.com/TylorS/typed-fp#readme"
+  "homepage": "https://github.com/TylorS/snowpack-plugin-hash#readme"
 }
