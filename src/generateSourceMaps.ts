@@ -39,27 +39,27 @@ export async function generateSourceMaps(
       // You might not have generated sourceMaps previously, so we'll at least generate one
       // For our own transformations.
       if (!existsSync(beforeMap)) {
-        return [afterMap, afterContent] as const
+        return [afterMap, afterMapContent] as const
       }
 
-      const initialSourceMap = await readFile(beforeMap).then((b) => JSON.parse(b.toString()))
-      const hashedSourceMap = JSON.parse(afterMapContent)
+      try {
+        const initialSourceMap = await readFile(beforeMap).then((b) => JSON.parse(b.toString()))
+        const hashedSourceMap = JSON.parse(afterMapContent)
 
-      const remapped = remapping([hashedSourceMap, initialSourceMap], () => null, false)
+        const remapped = remapping([hashedSourceMap, initialSourceMap], () => null, false)
 
-      remapped.sources = remapped.sources.map((s) => (s ? rewrite(s) : s))
+        remapped.sources = remapped.sources.map((s) => (s ? rewrite(s) : s))
 
-      return [afterMap, remapped.toString()] as const
+        return [afterMap, remapped.toString()] as const
+      } catch (error) {
+        console.info(`Unable to generate remapped source map for`, filePath, error)
+
+        return [afterMap, afterMapContent] as const
+      }
     }),
   )
 }
 
 function rewriteSource(filePath: string) {
-  return (sourceMap: string) => {
-    const map = JSON.parse(sourceMap)
-
-    map.sources = map.sources.map((source: string) => relative(dirname(filePath), source))
-
-    return JSON.stringify(map, null, 2)
-  }
+  return (source: string) => relative(dirname(filePath), source)
 }
