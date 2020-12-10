@@ -9,6 +9,7 @@ import { rewriteSourceMapUrls } from './rewriteSourceMapUrls'
 export type RewriteHashesOptions = {
   readonly log: (msg: string) => void
   readonly buildDirectory: string
+  readonly baseUrl: string
   readonly jsFiles: readonly SourceFile[]
   readonly cssFiles: readonly string[]
   readonly hashes: ReadonlyMap<string, string>
@@ -16,7 +17,7 @@ export type RewriteHashesOptions = {
 }
 
 export async function rewriteHashesInSourceFiles(options: RewriteHashesOptions) {
-  const { log, buildDirectory, jsFiles, cssFiles, hashes, initialSnapshot } = options
+  const { log, baseUrl, buildDirectory, jsFiles, cssFiles, hashes, initialSnapshot } = options
 
   // Update JavaScript Files with hashes
   if (jsFiles.length > 0) {
@@ -33,6 +34,6 @@ export async function rewriteHashesInSourceFiles(options: RewriteHashesOptions) 
   if (cssFiles.length > 0) {
     log(`${yellow('!')} Rewriting CSS files...`)
 
-    await rewriteCssHashes(buildDirectory, cssFiles, initialSnapshot, hashes)
+    await rewriteCssHashes(buildDirectory, baseUrl, cssFiles, initialSnapshot, hashes)
   }
 }

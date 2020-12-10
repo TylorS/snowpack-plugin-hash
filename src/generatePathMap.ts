@@ -4,19 +4,25 @@ import { makeAbsolute } from './makeAbsolute'
 
 export function generatePathMap(
   buildDirectory: string,
+  baseUrl: string,
   hashes: ReadonlyMap<string, string>,
   filePath: string,
 ): Record<string, string> {
-  return Object.fromEntries(Array.from(hashes).flatMap(applyRemounts(buildDirectory, filePath)))
+  return Object.fromEntries(
+    Array.from(hashes).flatMap(applyRemounts(buildDirectory, baseUrl, filePath)),
+  )
 }
 
-function applyRemounts(buildDirectory: string, path: string) {
+function applyRemounts(buildDirectory: string, baseUrl: string, path: string) {
   return ([from, hash]: [string, string]): ReadonlyArray<readonly [string, string]> => {
     const ext = extname(from)
     const to = from.replace(ext, `.${hash}${ext}`)
 
     return [
-      [absoluteRemount(buildDirectory, from), absoluteRemount(buildDirectory, to)],
+      [
+        applyBase(baseUrl, absoluteRemount(buildDirectory, from)),
+        applyBase(baseUrl, absoluteRemount(buildDirectory, to)),
+      ],
       [
         ensureRelative(relative(dirname(path), makeAbsolute(buildDirectory, from))),
         ensureRelative(relative(dirname(path), makeAbsolute(buildDirectory, to))),
@@ -35,4 +41,8 @@ function ensureRelative(path: string): string {
   }
 
   return './' + path
+}
+
+function applyBase(baseUrl: string, path: string) {
+  return baseUrl + path.slice(1)
 }

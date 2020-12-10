@@ -35,8 +35,8 @@ export const test = describe(`generatePathMap`, [
         '../C/d/a.js': '../C/d/a.eldi.js',
       }
 
-      equal(expectedA, generatePathMap(buildDirectory, hashes, htmlFileA))
-      equal(expectedB, generatePathMap(buildDirectory, hashes, htmlFileB))
+      equal(expectedA, generatePathMap(buildDirectory, '/', hashes, htmlFileA))
+      equal(expectedB, generatePathMap(buildDirectory, '/', hashes, htmlFileB))
     }),
   ]),
 ])

@@ -12,10 +12,11 @@ export async function rewriteHtmlFiles(
   htmlFiles: readonly string[],
   hashes: Map<string, string>,
   buildDirectory: string,
+  baseUrl: string,
 ) {
   await Promise.all(
     htmlFiles.map(async (htmlFile) => {
-      const pathMap = generatePathMap(buildDirectory, hashes, htmlFile)
+      const pathMap = generatePathMap(buildDirectory, baseUrl, hashes, htmlFile)
       const rewrite = postHtml([rewritePaths({ search, pathMap })])
 
       const buffer = await readFile(htmlFile)

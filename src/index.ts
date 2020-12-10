@@ -76,6 +76,7 @@ const plugin = (
       await rewriteHashesInSourceFiles({
         log,
         buildDirectory: options.buildDirectory,
+        baseUrl: config.buildOptions.baseUrl,
         jsFiles,
         cssFiles,
         hashes,
@@ -94,7 +95,12 @@ const plugin = (
       if (htmlFiles.length > 0) {
         log(`${yellow('!')} Rewriting HTML imports...`)
 
-        await rewriteHtmlFiles(htmlFiles, hashes, options.buildDirectory)
+        await rewriteHtmlFiles(
+          htmlFiles,
+          hashes,
+          options.buildDirectory,
+          config.buildOptions.baseUrl,
+        )
       }
 
       // Generate SourceMaps for hash additions
