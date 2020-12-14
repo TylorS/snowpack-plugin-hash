@@ -1,6 +1,7 @@
 import { dirname } from 'path'
 import { SourceFile } from 'ts-morph'
 
+import { getHashedPath } from './getHashedPath'
 import { makeAbsolute } from './makeAbsolute'
 import { replaceHash } from './replaceHash'
 
@@ -19,7 +20,7 @@ export function rewriteExportDeclarations(
       }
 
       const importFilePath = makeAbsolute(directory, specifier)
-      const hash = hashes.get(importFilePath)
+      const hash = hashes.get(getHashedPath(importFilePath))
 
       if (hash) {
         exportDeclaration.setModuleSpecifier(replaceHash(specifier, hash))

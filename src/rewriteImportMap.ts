@@ -1,6 +1,7 @@
 import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
 
+import { getHashedPath } from './getHashedPath'
 import { replaceHash } from './replaceHash'
 
 export async function rewriteImportMap(
@@ -21,7 +22,7 @@ export async function rewriteImportMap(
 
 function rewritePath(directory: string, outputPath: string, hashes: Map<string, string>): string {
   const fullPath = join(directory, outputPath)
-  const hash = hashes.get(fullPath)
+  const hash = hashes.get(getHashedPath(fullPath))
 
   return hash ? replaceHash(outputPath, hash) : outputPath
 }
