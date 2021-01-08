@@ -45,7 +45,7 @@
   "scripts": {
     "build": "rimraf lib && tsc --outDir lib",
     "test": "concurrently 'npm:lint' 'npm:unit-test'",
-    "unit-test": "typed-test",
+    "unit-test": "echo 'No tests, yet!'",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
     "precommit": "lint-staged",
     "preversion": "npm test && npm run build",
