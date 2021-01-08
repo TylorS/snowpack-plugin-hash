@@ -1,11 +1,6 @@
 {
   "compilerOptions": {
     "baseUrl": "./src",
-    "paths": {
-      "@typed/fp/*": [
-        "./*"
-      ]
-    },
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "declarationMap": true,
