@@ -24,10 +24,7 @@ const DEFAULT_ASSET_MANIFEST = 'asset-manifest.json'
 
 const logPrefix = gray('[snowpack-plugin-hash]')
 
-const plugin = (
-  config: SnowpackConfig,
-  pluginOptions: plugin.PluginOptions = {},
-): SnowpackPlugin => {
+const plugin = (_: SnowpackConfig, pluginOptions: plugin.PluginOptions = {}): SnowpackPlugin => {
   const compilerOptions = pipe(
     findTsConfig({
       directory: process.cwd(),
@@ -49,7 +46,7 @@ const plugin = (
       const assetManifestFileName = pluginOptions.assetManifest ?? DEFAULT_ASSET_MANIFEST
       const registry = await contentHashDirectory({
         directory: options.buildDirectory,
-        plugins: createDefaultPlugins({ compilerOptions }),
+        plugins: createDefaultPlugins({ ...options, compilerOptions }),
         hashLength,
         assetManifest: assetManifestFileName,
         baseUrl: pluginOptions.baseUrl,
@@ -57,7 +54,7 @@ const plugin = (
       })
 
       // Try to rewrite the import map with hashes
-      const webModulesDir = join(options.buildDirectory, config.buildOptions.webModulesUrl)
+      const webModulesDir = join(options.buildDirectory, 'web_modules')
       const importMapPath = join(webModulesDir, 'import-map.json')
 
       if (existsSync(importMapPath)) {
