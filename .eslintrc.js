@@ -35,9 +35,6 @@ module.exports = {
     },
     'import/resolver': {
       'custom-alias': {
-        alias: {
-          '@typed/fp': './src',
-        },
         extensions: ['.ts', '.tsx'],
       },
     },

@@ -1,8 +1,15 @@
-import { defaultPlugins, rewriteDirectory } from '@typed/content-hash'
-import { pipe } from 'fp-ts/function'
-import { getOrElse, map } from 'fp-ts/Option'
+import {
+  contentHashDirectory,
+  createDefaultPlugins,
+  fsReadFile,
+  LoggerEnv,
+  LogLevel,
+} from '@typed/content-hash'
+import { log, provideAll, toPromise } from '@typed/fp'
+import { pipe } from 'fp-ts/lib/function'
+import { getOrElse, map } from 'fp-ts/lib/Option'
 import { existsSync } from 'fs'
-import { join } from 'path'
+import { join, resolve } from 'path'
 import { SnowpackConfig, SnowpackPlugin } from 'snowpack'
 import { gray, green, yellow } from 'typed-colors'
 import { tick } from 'typed-figures'
@@ -17,8 +24,6 @@ const DEFAULT_ASSET_MANIFEST = 'asset-manifest.json'
 
 const logPrefix = gray('[snowpack-plugin-hash]')
 
-const log = (msg: string) => console.info(logPrefix, msg)
-
 const plugin = (
   config: SnowpackConfig,
   pluginOptions: plugin.PluginOptions = {},
@@ -31,18 +36,21 @@ const plugin = (
     map((t) => t.compilerOptions),
     getOrElse(getDefaultCompilerOptions),
   )
+  const hashLength = pluginOptions.hashLength ?? DEFAULT_HASH_LENGTH
+  const loggerEnv: LoggerEnv = {
+    logLevel: LogLevel.Info,
+    logPrefix,
+    logger: (msg: string) => pipe(msg, log, provideAll({ console })),
+  }
 
   return {
     name: 'snowpack-plugin-hash',
     optimize: async (options) => {
       const assetManifestFileName = pluginOptions.assetManifest ?? DEFAULT_ASSET_MANIFEST
-      const { assetManifest, hashes } = await rewriteDirectory({
+      const registry = await contentHashDirectory({
         directory: options.buildDirectory,
-        plugins: defaultPlugins,
-        hashLength: pluginOptions.hashLength ?? DEFAULT_HASH_LENGTH,
-        pluginEnv: {
-          compilerOptions,
-        },
+        plugins: createDefaultPlugins({ compilerOptions }),
+        hashLength,
         assetManifest: assetManifestFileName,
         baseUrl: pluginOptions.baseUrl,
         logPrefix,
@@ -55,12 +63,21 @@ const plugin = (
       if (existsSync(importMapPath)) {
         log(`${yellow('!')} Rewriting Import Map...`)
 
-        const importMap = await rewriteImportMap(importMapPath, hashes)
+        const importMap = await rewriteImportMap(importMapPath, registry, hashLength)
 
         log(`${yellow('!')} Rewriting Asset Manifest [${assetManifestFileName}]...`)
 
+        const document = await pipe(
+          fsReadFile(resolve(options.buildDirectory, assetManifestFileName), {
+            supportsSourceMaps: false,
+            isBase64Encoded: false,
+          }),
+          provideAll(loggerEnv),
+          toPromise,
+        )
+
         // Generate an asset manifest for all files at configured path
-        await appendImportMapToAssetManifest(webModulesDir, assetManifest, importMap)
+        await appendImportMapToAssetManifest(webModulesDir, document, importMap)
       }
 
       log(`${green(tick)} Complete`)

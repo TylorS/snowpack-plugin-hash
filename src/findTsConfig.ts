@@ -1,4 +1,4 @@
-import { none, Option, some } from 'fp-ts/Option'
+import { none, Option, some } from 'fp-ts/lib/Option'
 import * as fs from 'fs'
 import { basename, dirname, join, resolve } from 'path'
 import {

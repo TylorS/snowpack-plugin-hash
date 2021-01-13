@@ -1,4 +1,4 @@
-import { Document, FileContents, FilePath } from '@typed/content-hash'
+import { Document } from '@typed/content-hash'
 import { writeFile } from 'fs/promises'
 import { dirname, relative, resolve } from 'path'
 
@@ -7,9 +7,9 @@ export async function appendImportMapToAssetManifest(
   manifest: Document,
   importMap: Record<string, string>,
 ) {
-  const path = FilePath.unwrap(manifest.filePath)
+  const path = manifest.filePath
   const manifestDir = dirname(path)
-  const currentContents = FileContents.unwrap(manifest.contents)
+  const currentContents = manifest.contents
   const updatedManifest = {
     ...JSON.parse(currentContents),
   }
