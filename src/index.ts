@@ -5,6 +5,7 @@ import {
   LoggerEnv,
   LogLevel,
 } from '@typed/content-hash'
+import { findTsConfig } from '@typed/content-hash/lib/cli/findTsConfig'
 import { log, provideAll, toPromise } from '@typed/fp'
 import { pipe } from 'fp-ts/lib/function'
 import { getOrElse, map } from 'fp-ts/lib/Option'
@@ -16,7 +17,6 @@ import { tick } from 'typed-figures'
 import { getDefaultCompilerOptions } from 'typescript'
 
 import { appendImportMapToAssetManifest } from './appendImportMapToAssetManifest'
-import { findTsConfig } from './findTsConfig'
 import { rewriteImportMap } from './rewriteImportMap'
 
 const DEFAULT_HASH_LENGTH = 12
