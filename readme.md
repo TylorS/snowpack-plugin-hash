@@ -6,11 +6,12 @@ Note that this plugin uses Snowpack's "optimize" plugin API which will only run 
 
 ## Features
 
-- SHA-512 Content Hashes for JS, JSX, and CSS files.
+- SHA-512 Content Hashes for JS, JSX, and CSS files, and their dependencies!.
 - SourceMap generation w/ remapping support
 - Remaps `import-map.json` to reference hashes
 - Generates an asset manifest for all files
 - Rewrites all the `script.src` and `link.href` in your HTML files.
+- Supports Snowpack v3 API
 
 ## Install
 
