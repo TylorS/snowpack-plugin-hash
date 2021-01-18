@@ -36,6 +36,17 @@ const getWebModulesDir = (buildDirectory: string) => {
   return possibleModuleDirs[0]
 }
 
+function getLogLevel(option?: string) {
+  switch (option) {
+    case 'debug':
+      return LogLevel.Debug
+    case 'error':
+      return LogLevel.Error
+    default:
+      return LogLevel.Info
+  }
+}
+
 const plugin = (_: SnowpackConfig, pluginOptions: plugin.PluginOptions = {}): SnowpackPlugin => {
   const compilerOptions = pipe(
     findTsConfig({
@@ -61,8 +72,12 @@ const plugin = (_: SnowpackConfig, pluginOptions: plugin.PluginOptions = {}): Sn
         plugins: createDefaultPlugins({ ...options, compilerOptions }),
         hashLength,
         assetManifest: assetManifestFileName,
-        baseUrl: pluginOptions.baseUrl,
+        baseUrl:
+          pluginOptions.baseUrl ??
+          (_.buildOptions.baseUrl === '/' ? undefined : _.buildOptions.baseUrl),
         logPrefix,
+        logLevel: getLogLevel(pluginOptions.logLevel),
+        registryFile: pluginOptions.registryFile,
       })
 
       // Try to rewrite the import map with hashes
@@ -100,6 +115,8 @@ namespace plugin {
     readonly hashLength?: number
     readonly assetManifest?: string
     readonly baseUrl?: string
+    readonly logLevel?: 'info' | 'error' | 'debug'
+    readonly registryFile?: string
   }
 }
 

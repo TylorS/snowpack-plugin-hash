@@ -7,7 +7,7 @@
   "typings": "./lib/index.d.ts",
   "sideEffects": false,
   "dependencies": {
-    "@typed/content-hash": "^0.3.6",
+    "@typed/content-hash": "^0.4.0",
     "fp-ts": "^2.9.3",
     "tslib": "^2.1.0",
     "typed-colors": "^1.0.0",
