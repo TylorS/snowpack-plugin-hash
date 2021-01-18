@@ -1,16 +1,16 @@
 # snowpack-plugin-hash
 
-Makes use of [ts-morph](https://ts-morph.com/) and [posthtml](https://github.com/posthtml/posthtml) to apply
-content hashes to all of your build assets. This can be helpful in production to allow caching files permanently since the hashes are determinstic based on the contents of the file. 
+Snowpack integration for [@typed/content-hash](https://github.com/TylorS/typed-content-hash) to apply content hashes to all of your build assets. This can be helpful in production to allow caching files permanently since the hashes are determinstic based on the contents of the file.
+
+Note that this plugin uses Snowpack's "optimize" plugin API which will only run during `snowpack build` to prepare your assets for production.
 
 ## Features
 
-- SHA-256 Content Hashes for JS, JSX, and CSS files.
+- SHA-512 Content Hashes for JS, JSX, and CSS files.
 - SourceMap generation w/ remapping support
 - Remaps `import-map.json` to reference hashes
 - Generates an asset manifest for all files
 - Rewrites all the `script.src` and `link.href` in your HTML files.
-- Supports buildOptions.baseUrl
 
 ## Install
 
@@ -33,13 +33,15 @@ module.exports = {
     [
       'snowpack-plugin-hash',
       // Entirely optional object. Showing default values
-      {
-        // Passed along to ts-morph, if you need a specific TS config
-        tsConfig: undefined
-        // Configure length of hashes
-        hashLength: 12 
-        // Configure output of asset manifest, relative to buildDirectory.
-        assetManifest: 'asset-manifest.json' 
+      { 
+        // Name of custom tsconfig to use for compiler options passed to TypeScript compiler
+        readonly tsConfig?: undefined
+        // Configured length of your hashes
+        readonly hashLength?: number
+        // Name of file for asset manifest JSON
+        readonly assetManifest?: string
+        // BaseURL to use to rewrite files being hashed
+        readonly baseUrl?: string
       }
     ]
   ]
