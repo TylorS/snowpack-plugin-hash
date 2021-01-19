@@ -62,22 +62,24 @@ const plugin = (_: SnowpackConfig, pluginOptions: plugin.PluginOptions = {}): Sn
     logPrefix,
     logger: (msg: string) => pipe(msg, log, provideAll({ console })),
   }
+  const assetManifest = pluginOptions.assetManifest ?? DEFAULT_ASSET_MANIFEST
+  const baseUrl =
+    pluginOptions.baseUrl ?? (_.buildOptions.baseUrl === '/' ? undefined : _.buildOptions.baseUrl)
+  const sourceMaps = pluginOptions.sourceMaps ?? _.buildOptions.sourcemap
 
   return {
     name: 'snowpack-plugin-hash',
     optimize: async (options) => {
-      const assetManifestFileName = pluginOptions.assetManifest ?? DEFAULT_ASSET_MANIFEST
       const registry = await contentHashDirectory({
         directory: options.buildDirectory,
         plugins: createDefaultPlugins({ ...options, compilerOptions }),
         hashLength,
-        assetManifest: assetManifestFileName,
-        baseUrl:
-          pluginOptions.baseUrl ??
-          (_.buildOptions.baseUrl === '/' ? undefined : _.buildOptions.baseUrl),
+        assetManifest,
+        baseUrl,
         logPrefix,
         logLevel: getLogLevel(pluginOptions.logLevel),
         registryFile: pluginOptions.registryFile,
+        sourceMaps,
       })
 
       // Try to rewrite the import map with hashes
@@ -89,10 +91,10 @@ const plugin = (_: SnowpackConfig, pluginOptions: plugin.PluginOptions = {}): Sn
 
         const importMap = await rewriteImportMap(importMapPath, registry, hashLength)
 
-        log(`${yellow('!')} Rewriting Asset Manifest [${assetManifestFileName}]...`)
+        log(`${yellow('!')} Rewriting Asset Manifest [${assetManifest}]...`)
 
         const document = await pipe(
-          fsReadFile(resolve(options.buildDirectory, assetManifestFileName), {
+          fsReadFile(resolve(options.buildDirectory, assetManifest), {
             supportsSourceMaps: false,
             isBase64Encoded: false,
           }),
@@ -117,6 +119,7 @@ namespace plugin {
     readonly baseUrl?: string
     readonly logLevel?: 'info' | 'error' | 'debug'
     readonly registryFile?: string
+    readonly sourceMaps?: boolean
   }
 }
 
