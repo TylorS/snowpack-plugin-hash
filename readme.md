@@ -44,6 +44,12 @@ module.exports = {
         readonly assetManifest?: string
         // BaseURL to use to rewrite files being hashed
         readonly baseUrl?: string
+        // Configure log level of plugin, 'error' | 'info' | 'debug'
+        readonly logLevel?: 'info'
+        // If the build succeeds, a file at this path will produce a JSON representing the AST generated
+        readonly registryFile?: undefined 
+        // Defaults the your buildOptions config, but can be used to override.
+        readonly sourceMaps?: boolean
       }
     ]
   ]
