@@ -1,5 +1,5 @@
 import { Document } from '@typed/content-hash'
-import { writeFile } from 'fs/promises'
+import { promises } from 'fs'
 import { dirname, relative, resolve } from 'path'
 
 export async function appendImportMapToAssetManifest(
@@ -18,5 +18,5 @@ export async function appendImportMapToAssetManifest(
     updatedManifest[from] = relative(manifestDir, resolve(webModulesDir, to))
   }
 
-  await writeFile(path, JSON.stringify(updatedManifest, null, 2))
+  await promises.writeFile(path, JSON.stringify(updatedManifest, null, 2))
 }

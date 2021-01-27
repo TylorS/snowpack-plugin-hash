@@ -1,6 +1,6 @@
 import { DocumentRegistry, getContentHash, replaceHash } from '@typed/content-hash'
 import { isSome } from 'fp-ts/lib/Option'
-import { readFile, writeFile } from 'fs/promises'
+import { promises } from 'fs'
 import { dirname, relative, resolve } from 'path'
 
 import { getFileExtension } from './getFileExtension'
@@ -11,7 +11,7 @@ export async function rewriteImportMap(
   hashLength: number,
 ) {
   const directory = dirname(importMapPath)
-  const importMap = await readFile(importMapPath).then((b) => JSON.parse(b.toString()))
+  const importMap = await promises.readFile(importMapPath).then((b) => JSON.parse(b.toString()))
 
   for (const [inputPath, outputPath] of Object.entries<string>(importMap.imports)) {
     const out = resolve(directory, outputPath)
@@ -29,7 +29,7 @@ export async function rewriteImportMap(
     }
   }
 
-  await writeFile(importMapPath, JSON.stringify(importMap, null, 2))
+  await promises.writeFile(importMapPath, JSON.stringify(importMap, null, 2))
 
   return importMap.imports as Record<string, string>
 }

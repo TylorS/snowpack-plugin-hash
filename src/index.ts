@@ -72,7 +72,11 @@ const plugin = (_: SnowpackConfig, pluginOptions: plugin.PluginOptions = {}): Sn
     optimize: async (options) => {
       const registry = await contentHashDirectory({
         directory: options.buildDirectory,
-        plugins: createDefaultPlugins({ ...options, compilerOptions }),
+        plugins: createDefaultPlugins({
+          buildDirectory: options.buildDirectory,
+          mainFields: pluginOptions.mainFields,
+          compilerOptions,
+        }),
         hashLength,
         assetManifest,
         baseUrl,
@@ -120,6 +124,7 @@ namespace plugin {
     readonly logLevel?: 'info' | 'error' | 'debug'
     readonly registryFile?: string
     readonly sourceMaps?: boolean
+    readonly mainFields?: readonly string[]
   }
 }
 
