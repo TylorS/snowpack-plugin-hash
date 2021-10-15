@@ -1,12 +1,12 @@
 # snowpack-plugin-hash
 
-Snowpack integration for [@typed/content-hash](https://github.com/TylorS/typed-content-hash) to apply content hashes to all of your build assets. This can be helpful in production to allow caching files permanently since the hashes are determinstic based on the contents of the file.
+Snowpack integration for [@typed/content-hash](https://github.com/TylorS/typed-content-hash) to apply content hashes to all of your build assets. This can be helpful in production to allow caching files permanently since the hashes are deterministic based on the contents of the file.
 
 Note that this plugin uses Snowpack's "optimize" plugin API which will only run during `snowpack build` to prepare your assets for production.
 
 ## Features
 
-- Determinstic, Content-based hashes for JS, JSX, CSS files, and their dependencies!.
+- Deterministic, Content-based hashes for JS, JSX, CSS files, and their dependencies!.
 - SourceMap generation w/ remapping support
 - Remaps `import-map.json` to reference hashes
 - Generates an asset manifest for all files
