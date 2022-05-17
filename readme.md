@@ -19,7 +19,7 @@ Note that this plugin uses Snowpack's "optimize" plugin API which will only run 
 ```sh
 npm i --save-dev snowpack-plugin-hash
 
-yarn add -d snowpack-plugin-hash
+yarn add -D snowpack-plugin-hash
 ```
 
 ## Usage
